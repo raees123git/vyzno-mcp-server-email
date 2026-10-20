@@ -1,5 +1,3 @@
-Your README is currently empty. Paste the following into [README.md](/D:/mcp-server-email/README.md). This describes the functionality currently implemented.
-
 ````markdown
 # Vyzno Mail MCP Server
 
