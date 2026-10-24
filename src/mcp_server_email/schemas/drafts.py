@@ -1,6 +1,12 @@
-from typing import Literal
+from typing import Literal, Self
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    EmailStr,
+    Field,
+    model_validator,
+)
 
 
 class CreateDraftInput(BaseModel):
@@ -12,18 +18,37 @@ class CreateDraftInput(BaseModel):
 
     type: Literal["new"] = "new"
 
-    to: list[EmailStr] = Field(min_length=1, max_length=100)
-    subject: str = Field(min_length=1, max_length=998)
-    body_text: str = Field(
+    to: list[EmailStr] = Field(
+        default_factory=list,
+        max_length=100,
+    )
+    subject: str | None = Field(
+        default=None,
+        max_length=998,
+    )
+    body_text: str | None = Field(
         default=None,
         alias="bodyText",
-        min_length=1,
         max_length=1_000_000,
     )
     body_html: str | None = Field(
         default=None,
         alias="bodyHtml",
-        min_length=1,
         max_length=1_000_000,
     )
-    
+
+    @model_validator(mode="after")
+    def require_content(self) -> Self:
+        has_content = bool(
+            self.to
+            or (self.subject or "").strip()
+            or (self.body_text or "").strip()
+            or (self.body_html or "").strip()
+        )
+
+        if not has_content:
+            raise ValueError(
+                "Provide a recipient, subject, or message content."
+            )
+
+        return self

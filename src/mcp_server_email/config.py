@@ -1,4 +1,4 @@
-from pydantic import Field, HttpUrl, SecretStr
+from pydantic import Field, HttpUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -15,6 +15,3 @@ class Settings(BaseSettings):
 
     vyzno_base_url: HttpUrl
     vyzno_origin: str = "https://vyzno.io"
-
-    vyzno_cookie_header: SecretStr = Field(min_length=1)
-    vyzno_csrf_token: SecretStr = Field(min_length=1)

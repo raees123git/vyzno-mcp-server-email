@@ -24,7 +24,7 @@ async def check_mcp_draft(
                         "to": [recipient],
                         "subject": "MCP tool draft test",
                         "bodyText": (
-                            "this is a test draft created through the MCP server. "
+                            "my name is raees "
                         ),
                         "bodyHtml": (
                             "<p>this is sent by raees..</p>"
