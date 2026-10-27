@@ -34,28 +34,27 @@ def vyzno_auth_headers(settings: Settings) -> dict[str, str]:
 
     cookie = headers.get("vyzno-cookie", "").strip()
     csrf_token = headers.get("vyzno-csrf-token", "").strip()
-    idempotency_key = headers.get("idempotency-key", "").strip()
     
 
-    if not cookie or not csrf_token or not idempotency_key:
+    if not cookie or not csrf_token:
         raise ToolError(
             "Missing Vyzno credentials. "
         )
 
-    try:
-        idempotency_key = UUID(idempotency_key)
-    except ValueError as error:
-        raise ToolError(
-            "The mailbox ID or idempotency key is not a valid UUID."
-        ) from error
+    # try:
+    #     idempotency_key = UUID(idempotency_key)
+    # except ValueError as error:
+    #     raise ToolError(
+    #         "The mailbox ID or idempotency key is not a valid UUID."
+    #     ) from error
 
-    if idempotency_key.version != 4:
-        raise ToolError("The idempotency key must be a UUID v4.")
+    # if idempotency_key.version != 4:
+    #     raise ToolError("The idempotency key must be a UUID v4.")
 
 
     return {
         "Cookie": cookie,
         "X-CSRF-Token": csrf_token,
-        "Idempotency-Key": str(idempotency_key),
+        # "Idempotency-Key": str(idempotency_key),
         "Origin": settings.vyzno_origin,
     }
